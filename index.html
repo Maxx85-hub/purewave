@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purewave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --accent: #00d4aa;
+      --muted: #6b7280;
+      --text: #f4f4f5;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 170, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 212, 170, 0.08), transparent);
+    }
+    main {
+      text-align: center;
+      max-width: 42rem;
+    }
+    .logo-img {
+      display: block;
+      max-width: 280px;
+      width: 100%;
+      height: auto;
+      margin: 0 auto 1rem;
+    }
+    .tagline {
+      font-size: 1.125rem;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+    .wave {
+      width: 100%;
+      max-width: 320px;
+      height: 80px;
+      margin: 0 auto 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .wave span {
+      width: 6px;
+      border-radius: 4px;
+      background: linear-gradient(to top, var(--accent), rgba(0, 212, 170, 0.4));
+      animation: wave 1.2s ease-in-out infinite;
+    }
+    .wave span:nth-child(1) { height: 20px; animation-delay: 0s; }
+    .wave span:nth-child(2) { height: 36px; animation-delay: 0.1s; }
+    .wave span:nth-child(3) { height: 48px; animation-delay: 0.2s; }
+    .wave span:nth-child(4) { height: 60px; animation-delay: 0.3s; }
+    .wave span:nth-child(5) { height: 40px; animation-delay: 0.4s; }
+    .wave span:nth-child(6) { height: 28px; animation-delay: 0.5s; }
+    .wave span:nth-child(7) { height: 44px; animation-delay: 0.6s; }
+    .wave span:nth-child(8) { height: 56px; animation-delay: 0.7s; }
+    .wave span:nth-child(9) { height: 32px; animation-delay: 0.8s; }
+    .wave span:nth-child(10) { height: 24px; animation-delay: 0.9s; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.6); }
+      50% { transform: scaleY(1); }
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 16px;
+      padding: 2rem;
+      text-align: left;
+    }
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .card p {
+      font-size: 0.9375rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="resources/images/logo.png" alt="Pure wave" class="logo-img" width="280" />
+    <p class="tagline">Web for Purewave</p>
+    <div class="wave" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="card">
+      <h2>Welcome</h2>
+      <p>This is a static page for Purewave. You can edit <code>index.html</code> to change the content and styles.</p>
+    </div>
+  </main>
+</body>
+</html>
