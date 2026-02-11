@@ -3,116 +3,390 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Purewave</title>
+  <title>PureWave</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --accent: #00d4aa;
-      --muted: #6b7280;
-      --text: #f4f4f5;
+      --bg: #fbfbfd;
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --link: #0066cc;
+      --border: rgba(0,0,0,.08);
     }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      font-size: 17px;
+      line-height: 1.47059;
+      font-weight: 400;
+      letter-spacing: -0.022em;
+    }
+    body.lang-zh .font-zh { font-family: "Noto Sans SC", -apple-system, sans-serif; }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(251,251,253,.8);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { height: 24px; width: auto; object-fit: contain; }
+    .page-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 24px;
+    }
+    .page-nav a {
+      padding: 6px 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color .15s, background .15s;
+    }
+    .page-nav a:hover { color: var(--text); background: rgba(0,0,0,.06); }
+    .page-nav a.active { color: var(--text); font-weight: 600; background: rgba(0,0,0,.08); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .lang-switch { display: flex; align-items: center; gap: 4px; }
+    .lang-switch a {
+      padding: 6px 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color .15s, background .15s;
+    }
+    .lang-switch a:hover { color: var(--text); background: rgba(0,0,0,.06); }
+    .lang-switch a.active { color: var(--text); font-weight: 600; background: rgba(0,0,0,.08); }
+
+    body.lang-en .page-zh { display: none !important; }
+    body.lang-zh .page-en { display: none !important; }
+    body.view-member .page-en,
+    body.view-member .page-zh { display: none !important; }
+    body.view-member .member-page { display: block; }
+    body.view-home .member-page { display: none !important; }
+    body.view-member.lang-en .member-zh { display: none !important; }
+    body.view-member.lang-zh .member-en { display: none !important; }
+
+    .page-en, .page-zh {
+      padding-top: 44px;
+      padding-bottom: 80px;
+    }
+
+    /* First page: logo + title centered, court as background */
+    .hero {
+      min-height: calc(100vh - 44px);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 170, 0.15), transparent),
-        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 212, 170, 0.08), transparent);
-    }
-    main {
       text-align: center;
-      max-width: 42rem;
+      padding: 48px 24px;
+      background: url('resources/images/court.png') center / cover no-repeat;
+      position: relative;
     }
-    .logo-img {
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 0;
+    }
+    .hero h1 {
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.95), 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+    .hero h1 {
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      max-width: 480px;
+    }
+
+    /* Poetry: all sentences together, centered */
+    .poem-section {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+      text-align: center;
+    }
+    .poem-section .poem {
+      font-size: clamp(17px, 2.5vw, 20px);
+      line-height: 1.85;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      text-wrap: pretty; /* 避免单独一个字或一个英文词单独成行 */
+    }
+    .poem-section .poem p {
+      margin: 0 0 1.25em 0;
+      text-wrap: pretty;
+    }
+    .page-zh .poem-section .poem p {
+      word-break: keep-all; /* 中文尽量不把词拆开 */
+    }
+    .poem-section .poem p:last-child {
+      margin-bottom: 0;
+    }
+    .footer {
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
+    }
+    .footer a { color: var(--link); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* Member page */
+    .member-page { padding-top: 44px; padding-bottom: 80px; display: none; }
+    .member-page .member-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 64px 24px 48px;
+    }
+    .member-page .page-title {
+      font-size: clamp(28px, 5vw, 36px);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .member-card {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+    .member-card:last-of-type { margin-bottom: 0; }
+    .member-photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 20px;
       display: block;
-      max-width: 280px;
-      width: 100%;
-      height: auto;
-      margin: 0 auto 1rem;
     }
-    .tagline {
-      font-size: 1.125rem;
-      font-weight: 300;
-      color: var(--muted);
-      margin-bottom: 3rem;
+    .member-name {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
-    .wave {
-      width: 100%;
-      max-width: 320px;
-      height: 80px;
-      margin: 0 auto 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
+    .member-byline {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
     }
-    .wave span {
-      width: 6px;
-      border-radius: 4px;
-      background: linear-gradient(to top, var(--accent), rgba(0, 212, 170, 0.4));
-      animation: wave 1.2s ease-in-out infinite;
+    .member-card .statement {
+      font-size: clamp(17px, 2.5vw, 19px);
+      line-height: 1.85;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      text-align: center;
+      text-wrap: pretty;
     }
-    .wave span:nth-child(1) { height: 20px; animation-delay: 0s; }
-    .wave span:nth-child(2) { height: 36px; animation-delay: 0.1s; }
-    .wave span:nth-child(3) { height: 48px; animation-delay: 0.2s; }
-    .wave span:nth-child(4) { height: 60px; animation-delay: 0.3s; }
-    .wave span:nth-child(5) { height: 40px; animation-delay: 0.4s; }
-    .wave span:nth-child(6) { height: 28px; animation-delay: 0.5s; }
-    .wave span:nth-child(7) { height: 44px; animation-delay: 0.6s; }
-    .wave span:nth-child(8) { height: 56px; animation-delay: 0.7s; }
-    .wave span:nth-child(9) { height: 32px; animation-delay: 0.8s; }
-    .wave span:nth-child(10) { height: 24px; animation-delay: 0.9s; }
-    @keyframes wave {
-      0%, 100% { transform: scaleY(0.6); }
-      50% { transform: scaleY(1); }
+    .member-card .statement p {
+      margin: 0 0 1.25em 0;
     }
-    .card {
-      background: var(--surface);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: left;
-    }
-    .card h2 {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-    .card p {
-      font-size: 0.9375rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+    .member-card .statement p:last-child { margin-bottom: 0; }
+    .member-zh .statement p { word-break: keep-all; }
   </style>
 </head>
-<body>
-  <main>
-    <img src="resources/images/logo.png" alt="Pure wave" class="logo-img" width="280" />
-    <p class="tagline">Web for Purewave</p>
-    <div class="wave" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
+<body class="lang-en">
+  <nav class="nav" aria-label="Main">
+    <a href="#" class="nav-home" aria-label="PureWave home">
+      <img src="resources/images/logo.png" alt="PureWave" class="nav-logo" />
+    </a>
+    <div class="page-nav">
+      <a href="#" data-page="home" class="active" id="nav-home">Home</a>
+      <a href="#" data-page="member" id="nav-member">Member</a>
     </div>
-    <div class="card">
-      <h2>Welcome</h2>
-      <p>This is a static page for Purewave. You can edit <code>index.html</code> to change the content and styles.</p>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <a href="#" data-lang="en" class="active" id="switch-en">EN</a>
+        <a href="#" data-lang="zh" id="switch-zh">中文</a>
+      </div>
     </div>
+  </nav>
+
+  <!-- ========== ENGLISH PAGE ========== -->
+  <main id="page-en" class="page-en">
+    <header class="hero">
+      <h1>Swing the pure wave within.</h1>
+    </header>
+    <section class="poem-section" aria-label="Poem">
+      <div class="poem">
+        <p>Dear teammates of Pearl Wave, Blaze Wave, and Blizzard Wave,</p>
+        <p>This letter is written for you.</p>
+        <p>You come from three different teams.</p>
+        <p>But I'm not sure if you've noticed a small detail lately — no matter which team you're on, team names ending with "Wave" seem to be appearing more and more around the Bay Area.</p>
+        <p>This is not a coincidence.</p>
+        <p>These names were not centrally planned or assigned, but emerged naturally as we trained, grew, and spent time together, as more people stepped in and contributed their own ideas. Each team took shape on its own.</p>
+        <p>Over time, we began to realize that this was no longer just three separate teams, but a group of people meeting again and again in the same rhythm, showing up with real commitment.</p>
+        <p>Those moments of sweating together, laughing together, and pushing through together started to feel like moments worth remembering.</p>
+        <p>We call this shared space PureWave.</p>
+      </div>
+    </section>
+    <footer class="footer">
+      <p>PureWave · Bay Area</p>
+    </footer>
   </main>
+
+  <!-- ========== CHINESE PAGE ========== -->
+  <main id="page-zh" class="page-zh font-zh">
+    <header class="hero">
+      <h1>荡起心中的纯浪。</h1>
+    </header>
+    <section class="poem-section" aria-label="诗">
+      <div class="poem">
+        <p>珍珠浪、烈焰浪、暴风浪的队友们：</p>
+        <p>这封信，是写给你们的。</p>
+        <p>你们来自三支不同的队伍。</p>
+        <p>但不知道你最近有没有注意到一件小事 — 不管你在哪支队，以「Wave」结尾的队名，在湾区好像变多了起来。</p>
+        <p>这并不是巧合。</p>
+        <p>这些名字，并不是被统一出来的，而是在我们一起训练、成长、彼此陪伴的过程中，随着更多人主动参与进来、贡献各自的灵感，一支一支自然形成的。</p>
+        <p>慢慢地，我们发现，这已经不只是三支独立的队伍，而是一群在同一个节奏里反复相遇、认真投入的人。</p>
+        <p>那些一起流汗、笑过、咬牙坚持过的瞬间，也开始变得值得被记住。</p>
+        <p>我们把这个共同的空间，叫做 PureWave。</p>
+      </div>
+    </section>
+    <footer class="footer">
+      <p>PureWave · 湾区</p>
+    </footer>
+  </main>
+
+  <!-- ========== MEMBER PAGE (EN) ========== -->
+  <div id="member-en" class="member-page member-en">
+    <div class="member-wrap">
+      <h1 class="page-title">Members</h1>
+
+      <article class="member-card">
+        <img src="resources/images/members/eva.jpg" alt="Eva Wu" class="member-photo" width="160" height="160" />
+        <h2 class="member-name">Eva Wu</h2>
+        <p class="member-byline">Founder</p>
+        <div class="statement">
+          <p>I'm Eva Wu, one of the initiators and co-builders of PureWave.</p>
+          <p>I grew up as an athlete, and later became a co-founder of an education technology company.</p>
+          <p>Whether in sports or in education, I've always been doing the same thing: building environments where people can stay engaged long-term, connect with one another, and grow together.</p>
+          <p>PureWave is not my idea alone. It has been shaped within the trainings, matches, and conversations you've already taken part in, gradually taking form over time.</p>
+          <p>Those seemingly small moments of joy and effort are in fact the truest expression of this community.</p>
+          <p>In PureWave, "Wave" is more than just a name. It represents rhythm and flow, and the way we move forward together through different stages.</p>
+          <p>The team you belong to may be Pearl Wave, Blaze Wave, or Blizzard Wave. No matter which Wave it is, you are already part of PureWave.</p>
+          <p>So I want to say this to you, officially: Welcome to PureWave's very first season.</p>
+          <p>This is not just a team, but a community that is actively taking shape. And you are part of what it looks like at the very beginning.</p>
+          <p>I'm really glad that this season, we get to be here together.</p>
+        </div>
+      </article>
+
+      <article class="member-card">
+        <img src="resources/images/members/zaizai.jpg" alt="Zaizai" class="member-photo" width="160" height="160" />
+        <h2 class="member-name">Zaizai</h2>
+        <p class="member-byline">Member</p>
+        <div class="statement">
+          <p>Meow.</p>
+        </div>
+      </article>
+    </div>
+    <footer class="footer">
+      <p>PureWave · Bay Area</p>
+    </footer>
+  </div>
+
+  <!-- ========== MEMBER PAGE (ZH) ========== -->
+  <div id="member-zh" class="member-page member-zh font-zh">
+    <div class="member-wrap">
+      <h1 class="page-title">成员们</h1>
+
+      <article class="member-card">
+        <img src="resources/images/members/eva.jpg" alt="Eva Wu" class="member-photo" width="160" height="160" />
+        <h2 class="member-name">Eva Wu</h2>
+        <p class="member-byline">创始人</p>
+        <div class="statement">
+          <p>我是 Eva Wu，PureWave 的发起者与共建者之一。</p>
+          <p>我从小是运动员，也曾经是一位教育科技公司的联合创始人。</p>
+          <p>无论是在运动还是在教育中，我始终在做同一件事：搭建一个能让人长期投入、彼此连接、共同成长的环境。</p>
+          <p>PureWave 并不是我一个人的想法。它是在你们已经参与其中的训练、比赛和交流里，一点一点被孕育出来的。</p>
+          <p>那些看似零散的快乐瞬间和努力片段，正是这个 community 最真实的样子。</p>
+          <p>在 PureWave 里，Wave 不只是一个名字。它代表的是节奏、流动，以及在不同阶段，一起向前的方式。</p>
+          <p>你所在的队伍，可能是 Pearl Wave、Blaze Wave，或 Blizzard Wave。无论是哪一支 Wave，你们都已经是 PureWave 的一部分。</p>
+          <p>所以，也想正式和你说一句：欢迎你，成为 PureWave 第一个赛季的成员。</p>
+          <p>这不仅是一支队伍，而是一个正在形成中的 community。而你，正参与了它最初的样子。</p>
+          <p>很高兴能在这个赛季，和你一起出现在这里。</p>
+        </div>
+      </article>
+
+      <article class="member-card">
+        <img src="resources/images/members/zaizai.jpg" alt="Zaizai" class="member-photo" width="160" height="160" />
+        <h2 class="member-name">Zaizai</h2>
+        <p class="member-byline">成员</p>
+        <div class="statement">
+          <p>喵。</p>
+        </div>
+      </article>
+    </div>
+    <footer class="footer">
+      <p>PureWave · 湾区</p>
+    </footer>
+  </div>
+
+  <script>
+    (function() {
+      var STORAGE_KEY = 'purewave-lang';
+      var PAGE_KEY = 'purewave-page';
+      var switchEn = document.getElementById('switch-en');
+      var switchZh = document.getElementById('switch-zh');
+      var navHome = document.getElementById('nav-home');
+      var navMember = document.getElementById('nav-member');
+      var navHomeLink = document.querySelector('.nav-home');
+
+      function setLang(lang) {
+        document.body.classList.remove('lang-en', 'lang-zh');
+        document.body.classList.add('lang-' + lang);
+        document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : 'en';
+        switchEn.classList.toggle('active', lang === 'en');
+        switchZh.classList.toggle('active', lang === 'zh');
+        navHome.textContent = lang === 'zh' ? '首页' : 'Home';
+        navMember.textContent = lang === 'zh' ? '成员' : 'Member';
+        try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+      }
+
+      function setPage(page) {
+        document.body.classList.remove('view-home', 'view-member');
+        document.body.classList.add('view-' + page);
+        navHome.classList.toggle('active', page === 'home');
+        navMember.classList.toggle('active', page === 'member');
+        try { localStorage.setItem(PAGE_KEY, page); } catch (e) {}
+      }
+
+      var savedLang = '';
+      try { savedLang = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+      setLang((savedLang === 'zh' || savedLang === 'en') ? savedLang : 'en');
+
+      var savedPage = '';
+      try { savedPage = localStorage.getItem(PAGE_KEY); } catch (e) {}
+      setPage((savedPage === 'member' || savedPage === 'home') ? savedPage : 'home');
+
+      switchEn.addEventListener('click', function(e) { e.preventDefault(); setLang('en'); });
+      switchZh.addEventListener('click', function(e) { e.preventDefault(); setLang('zh'); });
+      navHome.addEventListener('click', function(e) { e.preventDefault(); setPage('home'); });
+      navMember.addEventListener('click', function(e) { e.preventDefault(); setPage('member'); });
+      if (navHomeLink) navHomeLink.addEventListener('click', function(e) { e.preventDefault(); setPage('home'); });
+    })();
+  </script>
 </body>
 </html>

@@ -21,23 +21,31 @@ After you push this repo and turn on GitHub Pages, the site is available at:
 4. Under **Branch**, pick `main`, folder **/ (root)**, then click **Save**.
 5. Wait a minute or two. The site will be live at **https://maxx85-hub.github.io/purewave/**.
 
-### Custom domain: www.purewavesports.com
+### Custom domain: purewavesports.com
 
-This repo is set up so the site can be served at **https://www.purewavesports.com**.
+GitHub requires the **root domain** (no www). The site will be at **https://purewavesports.com**. GitHub will redirect **www.purewavesports.com** to it if you add the CNAME below.
 
-1. **On GitHub** (after Pages is enabled): **Settings** → **Pages** → **Custom domain** → enter `www.purewavesports.com` → **Save**. Optionally enable **Enforce HTTPS** once DNS has propagated.
+1. **On GitHub** (after Pages is enabled): **Settings** → **Pages** → **Custom domain** → enter **`purewavesports.com`** (no www) → **Save**. Enable **Enforce HTTPS** once DNS has propagated.
 
-2. **At your domain registrar** (where you manage purewavesports.com), add a DNS record:
+2. **At your domain registrar** (where you manage purewavesports.com), add these DNS records:
+
+   **Root domain (required):**
+
+   | Type | Name | Value / Target     |
+   |------|------|--------------------|
+   | A    | @    | `185.199.108.153`  |
+   | A    | @    | `185.199.109.153`  |
+   | A    | @    | `185.199.110.153`  |
+   | A    | @    | `185.199.111.153`  |
+
+   **Optional – make www work:**  
+   Add a CNAME so **www.purewavesports.com** redirects to your site:
 
    | Type  | Name | Value / Target        |
    |-------|------|------------------------|
    | CNAME | www  | `Maxx85-hub.github.io` |
 
-   Leave **Name** as `www` (or `www.purewavesports.com` if your provider requires the full hostname).
-
-3. Wait for DNS to propagate (from a few minutes up to 48 hours). After that, **https://www.purewavesports.com** will show this site.
-
-To use the bare domain **purewavesports.com** (no www) as well, you’d add A records for GitHub’s IPs or an ALIAS/ANAME record at your DNS provider; many registrars have a guide for “GitHub Pages custom domain.”
+3. Wait for DNS to propagate (from a few minutes up to 48 hours). Then **https://purewavesports.com** (and **https://www.purewavesports.com** if you added the CNAME) will show this site.
 
 ## Run locally
 
