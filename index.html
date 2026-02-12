@@ -371,6 +371,7 @@
       .hero h1 { max-width: 100%; }
       .hero-logos-container {
         top: 39%;
+        gap: 0;
       }
       .hero-logo-left,
       .hero-logo-bg {
@@ -378,7 +379,7 @@
         height: 150px;
       }
       .hero-logo-bg {
-        margin-left: -80px;
+        margin-left: -70px;
       }
       .poem-section { padding: 32px 16px 48px; }
       .poem-section .poem { font-size: 16px; }
@@ -394,10 +395,12 @@
       }
       .footer-logos {
         gap: 10px;
+        flex-wrap: nowrap;
       }
       .footer-logo {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
+        flex: 0 0 auto;
       }
     }
   </style>
